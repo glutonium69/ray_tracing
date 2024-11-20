@@ -124,13 +124,13 @@ Vec3 get_reflation_dir(const Vec3& normal) {
         return -on_unit_sphere;
 }
 
-Vec3 reflect(const Vec3& ray_in, const Vec3& normal) {
-    return ray_in - 2 * dot(ray_in, normal) * normal;
+Vec3 reflect(const Vec3& ray_dir, const Vec3& normal) {
+    return ray_dir - 2 * dot(ray_dir, normal) * normal;
 }
 
-Vec3 refract(const Vec3& ray_in, const Vec3& normal, double etai_over_etat) {
-    double cos_theta = std::fmin(dot(-ray_in, normal), 1.0);
-    Vec3 ray_out_perpendicular = etai_over_etat * (ray_in + cos_theta * normal);
+Vec3 refract(const Vec3& ray_dir_normalised, const Vec3& normal, double etai_over_etat) {
+    double cos_theta = std::fmin(dot(-ray_dir_normalised, normal), 1.0);
+    Vec3 ray_out_perpendicular = etai_over_etat * (ray_dir_normalised + cos_theta * normal);
     Vec3 ray_out_parallel = -std::sqrt(std::fabs(1.0 - ray_out_perpendicular.length_squared())) * normal;
 
     return ray_out_perpendicular + ray_out_parallel;
