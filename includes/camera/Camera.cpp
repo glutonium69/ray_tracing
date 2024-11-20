@@ -1,9 +1,20 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/Window.hpp>
+
 #include "Camera.hpp"
 #include "../Utils.hpp"
 
-
 void Camera::render(const Hittable& world) {
     initialise();
+
+    sf::RenderWindow window(sf::VideoMode(image_width, image_height), "Ray tracing");
+
+    sf::Image i_image;
+    i_image.create(image_width, image_height);
 
     std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
@@ -16,8 +27,29 @@ void Camera::render(const Hittable& world) {
                 total_color += ray_color(ray, world, search_dept);
             }
 
-            write_color(std::cout, total_color / samples_per_pixel);
+            Color px_color = write_color(std::cout, total_color / samples_per_pixel);
+            i_image.setPixel(i, j, sf::Color(px_color.x(), px_color.y(), px_color.z()));
         }
+    }
+
+    sf::Texture t_image;
+    t_image.loadFromImage(i_image);
+
+    sf::Sprite s_image(t_image);
+
+    while(window.isOpen()){
+        sf::Event event;
+
+        while(window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+
+        window.draw(s_image);
+
+        window.display();
     }
 }
 

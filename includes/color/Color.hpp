@@ -9,4 +9,4 @@ using Color = Vec3;
 
 inline double linear_to_gamma(double linear_component);
 
-void write_color(std::ostream& out , const Color& pixel_color);
+Color write_color(std::ostream& out , const Color& pixel_color);

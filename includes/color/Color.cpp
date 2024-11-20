@@ -9,7 +9,7 @@ double linear_to_gamma(double linear_component) {
 }
 
 
-void write_color(std::ostream& out , const Color& pixel_color) {
+Color write_color(std::ostream& out , const Color& pixel_color) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();
@@ -24,4 +24,6 @@ void write_color(std::ostream& out , const Color& pixel_color) {
     int ib = int(256 * intensity.clamp(b));
 
     out << ir << ' ' << ig << ' ' << ib << '\n';
+
+    return Color(ir, ig, ib);
 }

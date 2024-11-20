@@ -1,8 +1,4 @@
-/*alias op='x-www-browser out/image.jpg'*/
-
-/*alias run='g++ main.cpp -o main includes/camera/Camera.cpp includes/color/Color.cpp includes/hittable/Hittable.cpp includes/interval/Interval.cpp includes/material/Material.cpp includes/ray/Ray.cpp includes/sphere/Sphere.cpp includes/vec3/Vec3.cpp includes/hittableList/HittableList.cpp && ./main > out/image.ppm && ffmpeg -loglevel quiet -i out/image.ppm out/image.jpg -y'*/
-
-
+/*alias compile='g++ main.cpp -o main includes/camera/Camera.cpp includes/color/Color.cpp includes/hittable/Hittable.cpp includes/interval/Interval.cpp includes/material/Material.cpp includes/ray/Ray.cpp includes/sphere/Sphere.cpp includes/vec3/Vec3.cpp includes/hittableList/HittableList.cpp -lsfml-graphics -lsfml-window -lsfml-system'*/
 
 #include <memory>
 
