@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Window.hpp>
 
@@ -16,7 +17,7 @@ void Camera::render(const Hittable& world) {
     sf::Image i_image;
     i_image.create(image_width, image_height);
 
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+    /*std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";*/
 
     for(int j = 0; j < image_height; j++) {
         for(int i = 0; i < image_width; i++) {
@@ -27,10 +28,23 @@ void Camera::render(const Hittable& world) {
                 total_color += ray_color(ray, world, search_dept);
             }
 
-            Color px_color = write_color(std::cout, total_color / samples_per_pixel);
-            i_image.setPixel(i, j, sf::Color(px_color.x(), px_color.y(), px_color.z()));
+            Color pixel_color = total_color / samples_per_pixel;
+
+            auto r = linear_to_gamma(pixel_color.x());
+            auto g = linear_to_gamma(pixel_color.y());
+            auto b = linear_to_gamma(pixel_color.z());
+
+            static const Interval intensity(0.000, 0.999);
+            int ir = int(256 * intensity.clamp(r));
+            int ig = int(256 * intensity.clamp(g));
+            int ib = int(256 * intensity.clamp(b));
+
+            i_image.setPixel(i, j, sf::Color(ir, ig, ib));
         }
     }
+
+    /*i_image.saveToFile("render.jpg");*/
+    /*return;*/
 
     sf::Texture t_image;
     t_image.loadFromImage(i_image);
@@ -41,7 +55,7 @@ void Camera::render(const Hittable& world) {
         sf::Event event;
 
         while(window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 window.close();
         }
 

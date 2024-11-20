@@ -33,3 +33,16 @@ private:
     Color albedo;
     double fuzz;
 };
+
+
+class Dielectric : public Material {
+public:
+    Dielectric(double refraction_index);
+
+    bool is_scattered(const Ray& ray_in, const HitRecord& hit_record, Color& attenuation, Ray& scattered) const override;
+
+private:
+    // Refractive index in vacuum or air, or the ratio of the material's refractive index over
+    // the refractive index of the enclosing media
+    double refraction_index;
+};

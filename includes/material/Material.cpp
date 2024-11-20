@@ -31,3 +31,19 @@ bool Metal::is_scattered(const Ray& ray_in, const HitRecord& hit_record, Color& 
     attenuation = albedo;
     return (dot(scattered.direction(), hit_record.normal) > 0);
 }
+
+
+
+Dielectric::Dielectric(double refraction_index) : refraction_index(refraction_index) {}
+
+
+bool Dielectric::is_scattered(const Ray& ray_in, const HitRecord& hit_record, Color& attenuation, Ray& scattered) const {
+    attenuation = Color(1.0, 1.0, 1.0);
+    double etai_over_etat = hit_record.front_face ? (1.0 / refraction_index) : refraction_index;
+
+    Vec3 normalised_ray_in = unit_vector(ray_in.direction());
+    Vec3 refracted_ray = refract(normalised_ray_in, hit_record.normal, etai_over_etat);
+
+    scattered = Ray(hit_record.p, refracted_ray);
+    return true;
+};
