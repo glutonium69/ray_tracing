@@ -3,7 +3,7 @@ Learning source: [Ray tracing in one weekend](https://raytracing.github.io/books
 ### Alias for compilation
 ```sh
 # compiles using g++
-alias compile='g++ main.cpp -o main includes/camera/Camera.cpp includes/color/Color.cpp includes/hittable/Hittable.cpp includes/interval/Interval.cpp includes/material/Material.cpp includes/ray/Ray.cpp includes/sphere/Sphere.cpp includes/vec3/Vec3.cpp includes/hittableList/HittableList.cpp'
+alias compile='g++ main.cpp -o main includes/camera/Camera.cpp includes/color/Color.cpp includes/hittable/Hittable.cpp includes/interval/Interval.cpp includes/material/Material.cpp includes/ray/Ray.cpp includes/sphere/Sphere.cpp includes/vec3/Vec3.cpp includes/hittableList/HittableList.cpp -lsfml-graphics -lsfml-window -lsfml-system'
 # executes the binary
 alias exec='./main > out/image.ppm'
 # converts to jpg to view on browser
