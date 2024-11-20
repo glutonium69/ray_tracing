@@ -45,4 +45,6 @@ private:
     // Refractive index in vacuum or air, or the ratio of the material's refractive index over
     // the refractive index of the enclosing media
     double refraction_index;
+
+    static double reflectance(double cos_theta, double refraction_index);
 };
