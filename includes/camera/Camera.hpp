@@ -15,6 +15,11 @@ public:
     int samples_per_pixel = 10;
     int search_dept = 10;
 
+    double vertical_fov = 90;  // Vertical view angle (field of view)
+    Point3 look_from = Point3(0, 0, 0);
+    Point3 look_at = Point3(0, 0, -1);
+    Vec3 vertical_up = Vec3(0, 1, 0);
+
     void render(const Hittable& world);
 
 private:
@@ -23,6 +28,7 @@ private:
     Point3 pixel00_loc;
     Vec3 pixel_delta_u;
     Vec3 pixel_delta_v;
+    Vec3 u, v, w; // Camera frame basis vectors
 
     void initialise();
 
