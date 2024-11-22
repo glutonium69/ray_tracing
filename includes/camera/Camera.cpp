@@ -26,7 +26,7 @@ void Camera::render(const Hittable& world) {
 
             for(int sample = 0; sample < samples_per_pixel; sample++) {
                 Ray ray = get_sample_ray(i, j);
-                total_color += ray_color(ray, world, search_dept);
+                total_color += ray_color(ray, world, search_depth);
             }
 
             Color pixel_color = total_color / samples_per_pixel;
@@ -76,11 +76,10 @@ void Camera::initialise() {
 
     camera_center = look_from;
 
-    float focal_length = (look_from - look_at).length();
     double theta = deg_to_rad(vertical_fov);
     double h = std::tan(theta / 2);
-    float viewport_height = 2 * h * focal_length;
-    float viewport_width = viewport_height * (double(image_width) / image_height);
+    auto viewport_height = 2 * h * focus_distance;
+    auto viewport_width = viewport_height * (double(image_width) / image_height);
 
     w = unit_vector(look_from - look_at);
     u = unit_vector(cross(vertical_up, w));
@@ -92,8 +91,12 @@ void Camera::initialise() {
     pixel_delta_u = viewport_u / image_width;
     pixel_delta_v = viewport_v / image_height;
 
-    Vec3 viewport_upper_left = camera_center - (focal_length * w) - (viewport_u / 2) - (viewport_v / 2);
+    Vec3 viewport_upper_left = camera_center - (focus_distance * w) - (viewport_u / 2) - (viewport_v / 2);
     pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+
+    double defocus_radius = focus_distance * std::tan(deg_to_rad(defocus_angle / 2));
+    defocus_disk_radius_x = u * defocus_radius;
+    defocus_disk_radius_y = v * defocus_radius;
 }
 
 
@@ -101,13 +104,21 @@ void Camera::initialise() {
 Ray Camera::get_sample_ray(int i, int j) const {
     Vec3 offset = get_offset();
     Vec3 sample_ray = pixel00_loc
-        + ((i + offset.x()) * pixel_delta_u)
-        + ((j + offset.y()) * pixel_delta_v);
+                    + ((i + offset.x()) * pixel_delta_u)
+                    + ((j + offset.y()) * pixel_delta_v);
 
-    Vec3 ray_dir = sample_ray - camera_center;
-    return Ray(camera_center, ray_dir);
+    Vec3 ray_origin = (defocus_angle <= 0) ? camera_center : defocus_disk_sample();
+    Vec3 ray_dir = sample_ray - ray_origin;
+
+    return Ray(ray_origin, ray_dir);
 }
 
+
+Point3 Camera::defocus_disk_sample() const {
+    auto disk_sample = rand_on_unit_disk();
+
+    return camera_center + (disk_sample[0] * defocus_disk_radius_x) + (disk_sample[1] * defocus_disk_radius_y);
+}
 
 
 Vec3 Camera::get_offset() const {

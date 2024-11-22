@@ -13,12 +13,15 @@ public:
     double aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
     int samples_per_pixel = 10;
-    int search_dept = 10;
+    int search_depth = 10;
 
     double vertical_fov = 90;  // Vertical view angle (field of view)
     Point3 look_from = Point3(0, 0, 0);
     Point3 look_at = Point3(0, 0, -1);
     Vec3 vertical_up = Vec3(0, 1, 0);
+
+    double defocus_angle = 0;
+    double focus_distance = 10;
 
     void render(const Hittable& world);
 
@@ -29,12 +32,16 @@ private:
     Vec3 pixel_delta_u;
     Vec3 pixel_delta_v;
     Vec3 u, v, w; // Camera frame basis vectors
+    Vec3 defocus_disk_radius_x;
+    Vec3 defocus_disk_radius_y;
 
     void initialise();
 
     Ray get_sample_ray(int i, int j) const;
 
     Vec3 get_offset() const;
+
+    Point3 defocus_disk_sample() const;
 
     Color ray_color(const Ray& ray, const Hittable& world, int max_depth) const;
 };

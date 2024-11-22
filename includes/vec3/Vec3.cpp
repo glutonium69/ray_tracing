@@ -135,3 +135,21 @@ Vec3 refract(const Vec3& ray_dir_normalised, const Vec3& normal, double etai_ove
 
     return ray_out_perpendicular + ray_out_parallel;
 }
+
+
+/*Vec3 rand_on_unit_disk() {*/
+/*    while(true) {*/
+/*        Vec3 rand_vec = Vec3(rand_db(-1, 1), rand_db(-1, 1), 0);*/
+/**/
+/*        if(rand_vec.length_squared() < 1)*/
+/*            return rand_vec;*/
+/*    }*/
+/*}*/
+
+Vec3 rand_on_unit_disk() {
+    while (true) {
+        auto p = Vec3(rand_db(-1,1), rand_db(-1,1), 0);
+        if (p.length_squared() < 1)
+            return p;
+    }
+}

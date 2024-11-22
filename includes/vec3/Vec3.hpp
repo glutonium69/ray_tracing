@@ -49,6 +49,7 @@ double dot(const Vec3& vec1, const Vec3& vec2);
 Vec3   cross(const Vec3& vec1, const Vec3& vec2);
 Vec3   unit_vector(const Vec3& vec);
 Vec3   rand_unit_vec();
+Vec3   rand_on_unit_disk();
 Vec3   get_reflation_dir(const Vec3& normal);
 Vec3   reflect(const Vec3& ray_dir, const Vec3& normal);
 Vec3   refract(const Vec3& ray_dir_normalised, const Vec3& normal, double etai_over_etat);
